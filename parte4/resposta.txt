@@ -1,0 +1,136 @@
+# Parte 4 — E-mail e Deliverability (Exim)
+
+## 1. Logs do Exim — onde verificar e o que procurar
+
+### Localização dos logs
+
+# Log principal — todas as transações de email ultimas 200 linhas
+tail -n 200 /var/log/exim4/mainlog | more
+
+# Log de rejeições e erros graves ultimas 100 linhas
+tail -n 100 /var/log/exim4/rejectlog | more
+
+# Log de panic (erros críticos do Exim) ultimas 50 linhas
+tail -n 50 /var/log/exim4/paniclog | more
+
+# Buscar mensagens de um domínio específico
+grep "cliente.com.br" /var/log/exim4/mainlog | tail -n 50 | more
+
+### O que procurar nos logs
+
+
+# Mensagens rejeitadas com motivo
+grep -iE "rejected|refused|denied|blacklist|spam" \
+  /var/log/exim4/mainlog | tail n 30
+
+# Mensagens entregues com sucesso
+grep "=> " /var/log/exim4/mainlog | tail -n 20
+
+# Erros de autenticação DKIM/SPF no log
+grep -iE "dkim|spf|dmarc|signature" /var/log/exim4/mainlog | tail -20
+
+# Ver fila de mensagens paradas
+exim -bp | head -30
+exim -bpc  #contar mensagens na fila
+
+
+### Sinais de alerta no log
+| Mensagem no log 
+
+| `550 ... blocked using` | IP em blacklist 
+| `Connection timed out` | Porta 25 bloqueada
+| `retry timeout exceeded` | Mensagem na fila há muito tempo sem entrega
+
+## 2. Configurações de DNS 
+
+### SPF
+
+# Verificar o registro SPF do domínio
+dig TXT cliente.com.br | grep spf
+host -t TXT cliente.com.br | grep spf
+
+
+### DKIM 
+
+# Verificar se o registro DKIM existe no DNS
+dig TXT default._paulokey.cliente.com.br
+
+# Ver a configuração do DKIM no Exim
+grep -r "dkim" /etc/exim4/ 
+cat /etc/exim4/conf.d/transport/30_exim4-config_remote_smtp\
+  grep -iE "dkim"
+
+# Verificar se a chave privada existe
+ls -la /etc/exim4/dkim/ 
+ls -la /etc/dkim/ 
+
+- Chave pública no DNS corresponde à chave privada no servidor
+- Exim está configurado para assinar mensagens outbound
+
+### DMARC 
+
+# Verificar registro DMARC
+dig TXT _dmarc.cliente.com.br
+host -t TXT _dmarc.cliente.com.br
+
+### PTR / rDNS 
+
+# Verificar se o IP do servidor tem PTR configurado
+dig -x <8.8.8.8> exemplo_ip
+host <1.1.1.1> exemplo_ip
+
+# O PTR deve resolver para um hostname que faça forward lookup para o mesmo IP
+
+ A   mail.google.com.br → 8.8.8.8
+
+rDNS é crítico: a maioria dos grandes provedores rejeita ou penaliza emails de IPs sem PTR configurado ou com PTR genérico. Sinal de segurança
+
+## 3. Identificar e verificar blacklists
+
+### O que indica que um IP está em blacklist
+
+# Sintomas no log do Exim:
+grep -iE "blacklist|blocked|listed|dnsbl|rbl|barracuda|spamhaus" \
+  /var/log/exim4/mainlog | tail -n 100
+
+## 4. Diferenciar problema de configuração vs reputação de IP
+
+### Problema de configuração (resolvível tecnicamente)
+
+# Sinais:
+# - Rejeição com mensagem sobre SPF/DKIM/DMARC
+grep -iE "spf|dkim|dmarc|authentication" /var/log/exim4/mainlog | tail -n 50 
+
+# - HELO inválido (hostname não resolve)
+grep "HELO\|EHLO" /var/log/exim4/mainlog | grep -i "reject\|invalid" | tail -n 50
+
+# - PTR ausente ou não corresponde ao HELO
+dig -x $IP_SERVIDOR
+
+# - Porta 25 bloqueada 
+telnet gmail-smtp-in.l.google.com 25
+telnet aspmx.l.google.com 25
+
+# Validação rápida
+exim -bV  # ver configuração compilada
+
+# Ver para quais domínios está sendo rejeitado
+grep "rejected\|refused" /var/log/exim4/mainlog | \
+  grep -oP '@\K[^>]+' | sort | uniq -c | sort -rn | head -10
+
+## 5. Comunicação com o cliente 
+
+### Mensagem inicial — ao abrir a investigação
+
+Olá
+
+Recebemos seu relato e já estamos investigando o problema com os emails
+do seu site. Em breve teremos mais informações.
+
+Enquanto isso, algumas perguntas rápidas que vão nos ajudar:
+• Quando começou o sintoma?
+• Quais endereços de email estão recebendo com problema? (Gmail, Outlook, outros?)
+• Os emails somem completamente ou estão indo para a caixa de spam?
+• Acontece com todos os emails enviados pelo site ou apenas alguns?
+
+Retornaremos com uma atualização.
