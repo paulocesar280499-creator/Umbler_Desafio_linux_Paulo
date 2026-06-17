@@ -26,6 +26,13 @@ nginx
 default.conf   # Configuração do Nginx
 php
 Dockerfile       # PHP-FPM com extensões MySQL
-  optionB
 
-deploy.yml               # GitHub Actions CI/CD pipeline
+Dificuldades
+
+No bonus tomei algum erro por reutilizar um arquivo yaml de estudo e tive que ir tratando com os requisitos, deixei registrado no log.
+
+Se tivesse mais tempo adicionaria comentario em cada etapa dos scripts
+
+adicionaria na parte2 para serviço do nginx e php-fpm ser iniciado quando falha ou estiver parado
+
+Com tempo tambem fazeria um scripts em ansible com mais opção para criar vhost em varios hosts da frotas
