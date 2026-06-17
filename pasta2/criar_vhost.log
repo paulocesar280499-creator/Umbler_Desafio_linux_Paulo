@@ -1,0 +1,19 @@
+2026-06-17 21:33:57 - Iniciando criação do ambiente para paulo_teste_infra.com
+2026-06-17 21:33:57 - Usuário cliente_paulo_teste_infra criado.
+2026-06-17 21:33:57 - Estrutura de diretórios criada.
+2026-06-17 21:33:57 - Virtual Host criado.
+2026-06-17 21:33:57 - Site habilitado.
+2026-06-17 21:33:57 - Nginx validado e recarregado.
+2026-06-17 21:33:57 - Provisionamento finalizado com sucesso.
+<html>
+<head><title>paulo_teste_infra.com</title></head>
+<body>
+<h1>Site paulo_teste_infra.com criado com sucesso!</h1>
+</body>
+</html>
+2026-06-17 21:36:36 - Iniciando criação do ambiente para paulo_teste_infra.com
+2026-06-17 21:36:36 - Usuário cliente_paulo_teste_infra já existe.
+2026-06-17 21:36:36 - Estrutura de diretórios criada.
+2026-06-17 21:36:36 - Virtual Host já existe.
+2026-06-17 21:36:36 - Nginx validado e recarregado.
+2026-06-17 21:36:36 - Provisionamento finalizado com sucesso.
