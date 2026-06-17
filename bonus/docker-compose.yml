@@ -1,0 +1,56 @@
+
+services:
+
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: umbler_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./app:/var/www/html:ro
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - app_network
+
+  php:
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
+    container_name: umbler_php
+    restart: unless-stopped
+    volumes:
+      - ./app:/var/www/html
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/custom.ini:ro
+    environment:
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME:-appdb}
+      DB_USER: ${DB_USER:-appuser}
+      DB_PASS: ${DB_PASS:-secret}
+    networks:
+      - app_network
+
+  mariadb:
+    image: mariadb:10.11
+    container_name: umbler_mariadb
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASS:-rootsecret}
+      MARIADB_DATABASE: ${DB_NAME:-appdb}
+      MARIADB_USER: ${DB_USER:-appuser}
+      MARIADB_PASSWORD: ${DB_PASS:-secret}
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./docker/mariadb/init:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "127.0.0.1:3306:3306"
+    networks:
+      - app_network
+
+volumes:
+  mariadb_data:
+    driver: local
+
+networks:
+  app_network:
+    driver: bridge
