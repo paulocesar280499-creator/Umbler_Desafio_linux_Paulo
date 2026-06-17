@@ -1,0 +1,24 @@
+[2026-06-17 21:05:21] ===== Iniciando Health Check =====
+[2026-06-17 21:05:21] OK: Nginx está ativo.
+[2026-06-17 21:05:21] OK: PHP-FPM está ativo.
+[2026-06-17 21:05:21] OK: Configuração do Nginx válida.
+[2026-06-17 21:05:21] OK: Porta 80 em escuta.
+[2026-06-17 21:05:21] OK: Socket do PHP-FPM encontrado.
+[2026-06-17 21:05:21] OK: Site respondeu HTTP 200.
+[2026-06-17 21:05:21] ===== Fim do Health Check =====
+[2026-06-17 21:05:35] ===== Iniciando Health Check =====
+[2026-06-17 21:05:35] OK: Nginx está ativo.
+[2026-06-17 21:05:35] OK: PHP-FPM está ativo.
+[2026-06-17 21:05:35] OK: Configuração do Nginx válida.
+[2026-06-17 21:05:35] OK: Porta 80 em escuta.
+[2026-06-17 21:05:35] OK: Socket do PHP-FPM encontrado.
+[2026-06-17 21:05:35] OK: Site respondeu HTTP 200.
+[2026-06-17 21:05:35] ===== Fim do Health Check =====
+[2026-06-17 21:07:02] ===== Iniciando Health Check =====
+[2026-06-17 21:07:02] ALERTA: Nginx está parado.
+[2026-06-17 21:07:02] ALERTA: PHP-FPM está parado.
+[2026-06-17 21:07:02] OK: Configuração do Nginx válida.
+[2026-06-17 21:07:02] ALERTA: Porta 80 não está em escuta.
+[2026-06-17 21:07:02] ALERTA: Socket do PHP-FPM não encontrado.
+[2026-06-17 21:07:02] ALERTA: Site respondeu HTTP 000.
+[2026-06-17 21:07:02] ===== Fim do Health Check =====
