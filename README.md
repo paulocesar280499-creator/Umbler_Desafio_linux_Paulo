@@ -33,6 +33,6 @@ No bonus tomei algum erro por reutilizar um arquivo yaml de estudo e tive que ir
 
 Se tivesse mais tempo adicionaria comentario em cada etapa dos scripts
 
-adicionaria na parte2 para serviço do nginx e php-fpm ser iniciado quando falha ou estiver parado
+adicionaria na parte2 para que o serviço do nginx e php-fpm ser iniciado quando falha ou estiver parado
 
 Com tempo tambem fazeria um scripts em ansible com mais opção para criar vhost em varios hosts da frotas
