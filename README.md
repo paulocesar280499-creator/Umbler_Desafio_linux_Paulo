@@ -5,7 +5,7 @@ Paulo Cesar santos De Jesus Junior
  README.md                        # Este arquivo
  parte1
     resolucao.md                 # Diagnóstico Nginx 502 + 3 causas + diferenciação por camada
-     checagem.sh              # Script bônus de health check
+               # Script bônus de health check
 
  parte2
    cria_vhost.sh             # Script de criação de ambiente de hospedagem
